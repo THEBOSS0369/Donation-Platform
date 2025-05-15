@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { CampaignProvider } from "./context/CampaignContext";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +18,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CampaignProvider>{children}</CampaignProvider>
+        <ul>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <Link href="/login">Login</Link>
+          </li>
+        </ul>
+        {children}
       </body>
     </html>
   );

@@ -1,53 +1,48 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import CreateCampaignForm from "./components/CreateCampaignForm";
-import CampaignCard from "./components/CampaignCard";
-import Link from "next/link";
+import Button from "./components/Button.tsx";
+import TaskCard from "./components/TaskCard.tsx";
+import { useState, useEffect } from "react";
+import TaskForm from "./components/TaskForm.tsx";
 
-type Campaign = {
+interface Task {
+  // id will be unique
   id: number;
   title: string;
-  goal: string;
-  raised: string;
-};
+  dueDate: string;
+  priority: string;
+}
 
 export default function Home() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  // tasks is an array and settask updates it
+  // Task[] tells tsx that tasks is an arry of Task object
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: 1, title: "Groceries", dueDate: "15:05:25", priority: "High" },
+    { id: 2, title: "Stationary", dueDate: "17:05:25", priority: "Medium" },
+  ]);
 
-  useEffect(() => {
-    // Simulate fetching data
-    const mockCampaigns: Campaign[] = [
-      { id: 1, title: "Help John’s Medical Bills", goal: 5000, raised: 2000 },
-      { id: 2, title: "School Supplies for Kids", goal: 3000, raised: 1500 },
-      { id: 3, title: "Community Garden", goal: 2000, raised: 1800 },
-    ];
-    setCampaigns(mockCampaigns);
-  }, []); // Empty bracaket shows that this runs once on mount
-
-  const addCampaign = (newCampaign: { title: string; goal: number }) => {
-    setCampaigns((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        title: newCampaign.title,
-        goal: newCampaign.goal,
-        raised: 0,
-      },
-    ]);
+  const handleTask = (newTask: Task) => {
+    // add new task to arrray
+    setTasks([...tasks, newTask]);
   };
 
+  useEffect(() => {
+    console.log("Task Added: ", tasks);
+  }, [tasks]);
+
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
-        Donation Platform
-      </h1>
-      <CreateCampaignForm onAddCampaign={addCampaign} />
-      <div className="flex flex-wrap justify-center gap-6 mt-8">
-        {campaigns.map((campaign) => (
-          <Link key={campaign.id} href={`/campaign/${campaign.id}`}>
-            <CampaignCard campaign={campaign} />
-          </Link>
+    <div>
+      <h1>Welcome To Home</h1>
+      <div className="flex flex-col gap-4 p-4">
+        <TaskForm onAddTask={handleTask} />
+        {tasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            title={task.title}
+            dueDate={task.dueDate}
+            priority={task.priority}
+          />
         ))}
+        <Button label="Button" onClick={() => alert("Button Clikced")} />
       </div>
     </div>
   );
